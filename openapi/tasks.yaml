@@ -18,8 +18,7 @@ paths:
                 type: array
                 items:
                   $ref: "difinitions.yaml#/components/schemas/Task"
-        500:
-          description: Unexpected Error
+
     post:
       tags:
         - Task
@@ -38,10 +37,7 @@ paths:
             application/json:
               schema:
                 $ref: "difinitions.yaml#/components/schemas/Task"
-        400:
-          description: Invalid request provided
-        500:
-          description: Unexpected Error
+
     patch:
       tags:
         - Task
@@ -56,31 +52,23 @@ paths:
       responses:
         200:
           description: Successful operation
-        400:
-          description: Invalid request provided
-        500:
-          description: Unexpected Error
+
+  /tasks/{id}:
     delete:
       tags:
         - Task
       summary: Delete Task
-      requestBody:
-        description: Task delete request
-        content:
-          application/json:
-            schema:
-              properties:
-                id: 
-                  type: integer
-              required:
-                - id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: 
+            type: integer
+          description: News delete request
       responses:
         200:
           description: Successful operation
-        400:
-          description: Invalid request provided
-        500:
-          description: Unexpected Error
+
   /tasks/setStatus/:
     post:
       tags:
@@ -91,19 +79,8 @@ paths:
         content:
             application/json:
               schema:
-                properties:
-                  status: 
-                    type: string
-                  id: 
-                    type: integer
-                required:
-                  - status
-                  - id
+                $ref: "difinitions.yaml#/components/schemas/SetStatus"
         required: true
       responses:
         200:
           description: Successful operation
-        400:
-          description: Invalid request provided
-        500:
-          description: Unexpected Error

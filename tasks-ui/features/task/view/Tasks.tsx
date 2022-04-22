@@ -29,56 +29,49 @@ export const Tasks = observer(() => {
   return (
     <>
       <div className={css.root} style={{ marginTop: '30px' }}>
-        {tasks
-          .map((t, i) => ({ ...t, id: i }))
-          .map((t) => (
-            <Card className={css.card} key={t.id}>
-              <CardContent>
-                <Typography component="div">Статус: {t.status}</Typography>
-                <Typography variant="h5" color="primary" gutterBottom>
-                  {t.name}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                {t.status === 'к выполнению' && (
-                  <Button
-                    size="small"
-                    color="primary"
-                    variant="contained"
-                    onClick={() => onBegin(t.id)}
-                  >
-                    начать
-                  </Button>
-                )}
-                {t.status === 'в процессе' && (
-                  <Button
-                    size="small"
-                    color="primary"
-                    variant="contained"
-                    onClick={() => onEnd(t.id)}
-                  >
-                    закончить
-                  </Button>
-                )}
+        {tasks.map((t) => (
+          <Card className={css.card} key={t.id}>
+            <CardContent>
+              <Typography component="div">Статус: {t.status}</Typography>
+              <Typography variant="h5" color="primary" gutterBottom>
+                {t.name}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              {t.status === 'к выполнению' && (
                 <Button
                   size="small"
                   color="primary"
                   variant="contained"
-                  onClick={() => onEdit(t.id)}
+                  onClick={() => onBegin(t.id)}
                 >
-                  переименовать
+                  начать
                 </Button>
+              )}
+              {t.status === 'в процессе' && (
                 <Button
                   size="small"
-                  color="secondary"
+                  color="primary"
                   variant="contained"
-                  onClick={() => deleteTask(t.id)}
+                  onClick={() => onEnd(t.id)}
                 >
-                  удалить
+                  закончить
                 </Button>
-              </CardActions>
-            </Card>
-          ))}
+              )}
+              <Button size="small" color="primary" variant="contained" onClick={() => onEdit(t.id)}>
+                переименовать
+              </Button>
+              <Button
+                size="small"
+                color="secondary"
+                variant="contained"
+                onClick={() => deleteTask(t.id)}
+              >
+                удалить
+              </Button>
+            </CardActions>
+          </Card>
+        ))}
       </div>
     </>
   );

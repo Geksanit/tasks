@@ -37,7 +37,7 @@ export const makeRouter = () => {
   router.post('/', async (req, res, next) => {
     try {
       tasks.push(req.body);
-      res.status(201).send('created');
+      res.status(201).send({ res: 'created' });
     } catch (error) {
       next(error);
     }
@@ -52,22 +52,20 @@ export const makeRouter = () => {
         throw new HttpError(400, 'not found task');
       }
       tasks.splice(index, 1, req.body);
-      res.send('updated');
+      res.send({ res: 'updated' });
     } catch (error) {
       next(error);
     }
   });
-  router.delete('/', async (req, res, next) => {
+  router.delete('/:id', async (req, res, next) => {
     try {
-      const {
-        body: { id },
-      } = req;
+      const id = parseInt(req.params.id, 10);
       const index = tasks.findIndex((t, i) => i === id);
       if (index === -1) {
         throw new HttpError(400, 'not found task');
       }
       tasks.splice(index, 1);
-      res.send('deleted');
+      res.send({ res: 'deleted' });
     } catch (error) {
       next(error);
     }
@@ -78,7 +76,7 @@ export const makeRouter = () => {
         body: { id, status },
       } = req;
       tasks = tasks.map((t, i) => (i === id ? { ...t, status } : t));
-      res.status(201).send('successful');
+      res.status(201).send({ res: 'successful' });
     } catch (error) {
       next(error);
     }

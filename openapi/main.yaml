@@ -6,6 +6,8 @@ info:
 paths:
   /tasks/:
     $ref: 'tasks.yaml#/paths/~1tasks~1'
+  /tasks/{id}:
+    $ref: 'tasks.yaml#/paths/~1tasks~1{id}'
   /tasks/setStatus/:
       $ref: 'tasks.yaml#/paths/~1tasks~1setStatus~1'
 

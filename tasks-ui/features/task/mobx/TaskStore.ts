@@ -3,28 +3,10 @@ import { flow, makeObservable, observable } from 'mobx';
 import { makeInitialCommunicationField } from 'shared/helpers/makeInitialCommunicationField';
 
 import { CreateTask, Task } from '../../../../types/generated';
-
-const taskMock: CreateTask[] = [
-  {
-    name: 'купить молоко',
-    status: 'к выполнению',
-  },
-  {
-    name: 'купить хлеб',
-    status: 'в процессе',
-  },
-  {
-    name: 'сварить пельмени',
-    status: 'выполнено',
-  },
-  {
-    name: 'помыть посуду',
-    status: 'к выполнению',
-  },
-];
+import { TaskApi } from './api/Task';
 
 class TaskStore {
-  public tasks: CreateTask[] = taskMock;
+  public tasks: Task[] = [];
 
   public taskLoadState = makeInitialCommunicationField();
 
@@ -35,6 +17,8 @@ class TaskStore {
   public setStatusState = makeInitialCommunicationField();
 
   public deleteTaskState = makeInitialCommunicationField();
+
+  private api = new TaskApi();
 
   constructor() {
     makeObservable(this, {
@@ -62,7 +46,7 @@ class TaskStore {
   *getTasks() {
     this.taskLoadState = { isRequesting: true, error: null };
     try {
-      yield;
+      this.tasks = yield this.api.loadTasks();
       this.taskLoadState = { isRequesting: false, error: null };
     } catch ({ message }) {
       this.taskLoadState = { isRequesting: false, error: message as string };
@@ -72,8 +56,7 @@ class TaskStore {
   *createTask(data: CreateTask) {
     this.createTaskState = { isRequesting: true, error: null };
     try {
-      this.tasks.push(data);
-      yield;
+      yield this.api.createTask(data);
       this.createTaskState = { isRequesting: false, error: null };
     } catch ({ message }) {
       this.createTaskState = { isRequesting: false, error: message as string };
@@ -83,12 +66,9 @@ class TaskStore {
   *editTask(data: Task) {
     this.editTaskState = { isRequesting: true, error: null };
     try {
-      const index = this.tasks.findIndex((t, i) => i === data.id);
-      if (index === -1) {
-        throw new Error('not found task');
-      }
-      this.tasks.splice(index, 1, data);
-      yield;
+      console.log('*editTask start');
+      yield this.api.editTask(data);
+      console.log('*editTask stop');
       this.editTaskState = { isRequesting: false, error: null };
     } catch ({ message }) {
       this.editTaskState = { isRequesting: false, error: message as string };
@@ -96,29 +76,21 @@ class TaskStore {
   }
 
   *setStatus(data: Pick<Task, 'id' | 'status'>) {
-    this.editTaskState = { isRequesting: true, error: null };
+    this.setStatusState = { isRequesting: true, error: null };
     try {
-      const index = this.tasks.findIndex((t, i) => i === data.id);
-      if (index === -1) {
-        throw new Error('not found task');
-      }
-      this.tasks[index].status = data.status;
-      yield;
-      this.editTaskState = { isRequesting: false, error: null };
+      yield this.api.setStatus(data);
+      yield this.getTasks();
+      this.setStatusState = { isRequesting: false, error: null };
     } catch ({ message }) {
-      this.editTaskState = { isRequesting: false, error: message as string };
+      this.setStatusState = { isRequesting: false, error: message as string };
     }
   }
 
   *deleteTask(id: number) {
     this.deleteTaskState = { isRequesting: true, error: null };
     try {
-      const index = this.tasks.findIndex((t, i) => i === id);
-      if (index === -1) {
-        throw new Error('not found task');
-      }
-      this.tasks.splice(index, 1);
-      yield;
+      yield this.api.deleteTask(id);
+      yield this.getTasks();
       this.deleteTaskState = { isRequesting: false, error: null };
     } catch ({ message }) {
       this.deleteTaskState = { isRequesting: false, error: message as string };

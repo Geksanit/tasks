@@ -1,7 +1,7 @@
 import { Button, Card, CardActions, CardContent, FormControl, TextField } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useStores, useAfterCommunication } from 'hooks';
@@ -14,15 +14,21 @@ type Prop = {
 
 export const EditTask = observer(({ id }: Prop) => {
   const {
-    taskStore: { tasks, editTask, editTaskState },
+    taskStore: { tasks, editTask, editTaskState, getTasks },
   } = useStores();
+  useEffect(() => {
+    getTasks();
+  }, [getTasks]);
   const { handleSubmit, register, errors } = useForm();
   const router = useRouter();
+  console.log(editTaskState.isRequesting, editTaskState.error);
   useAfterCommunication(editTaskState, () => router.push('/tasks/'));
-  const task = tasks[id];
+  const task = tasks.find((t) => t.id === id);
   const onSubmit = async (data: { title: string }) => {
     editTask({ name: data.title, status: 'к выполнению', id: 0 });
   };
+
+  if (!task) return null;
 
   return (
     <Card className={css.card}>

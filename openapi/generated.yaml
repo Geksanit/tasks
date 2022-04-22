@@ -33,8 +33,6 @@ paths:
                           type: integer
                       required:
                         - id
-        '500':
-          description: Unexpected Error
     post:
       tags:
         - Task
@@ -76,10 +74,6 @@ paths:
                         type: integer
                     required:
                       - id
-        '400':
-          description: Invalid request provided
-        '500':
-          description: Unexpected Error
     patch:
       tags:
         - Task
@@ -109,31 +103,21 @@ paths:
       responses:
         '200':
           description: Successful operation
-        '400':
-          description: Invalid request provided
-        '500':
-          description: Unexpected Error
+  '/tasks/{id}':
     delete:
       tags:
         - Task
       summary: Delete Task
-      requestBody:
-        description: Task delete request
-        content:
-          application/json:
-            schema:
-              properties:
-                id:
-                  type: integer
-              required:
-                - id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: News delete request
       responses:
         '200':
           description: Successful operation
-        '400':
-          description: Invalid request provided
-        '500':
-          description: Unexpected Error
   /tasks/setStatus/:
     post:
       tags:
@@ -144,22 +128,19 @@ paths:
         content:
           application/json:
             schema:
+              type: object
               properties:
                 status:
                   type: string
                 id:
                   type: integer
               required:
-                - status
                 - id
+                - status
         required: true
       responses:
         '200':
           description: Successful operation
-        '400':
-          description: Invalid request provided
-        '500':
-          description: Unexpected Error
 components:
   securitySchemes:
     cookieAuth:

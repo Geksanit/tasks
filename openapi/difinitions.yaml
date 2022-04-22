@@ -49,3 +49,13 @@ components:
       required:
         - name
         - status
+    SetStatus:
+      type: object
+      properties:
+        status:
+          type: string
+        id: 
+          type: integer
+      required:
+        - id
+        - status
