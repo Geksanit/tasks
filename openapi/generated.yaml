@@ -1,0 +1,168 @@
+openapi: 3.0.1
+info:
+  title: Rest API Docs
+  description: MetaNews is a news site
+  version: 1.0.0
+paths:
+  /tasks/:
+    get:
+      tags:
+        - Task
+      summary: All available tasks
+      responses:
+        '200':
+          description: A list of categories.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - type: object
+                      properties:
+                        status:
+                          type: string
+                        name:
+                          type: string
+                      required:
+                        - name
+                        - status
+                    - type: object
+                      properties:
+                        id:
+                          type: integer
+                      required:
+                        - id
+        '500':
+          description: Unexpected Error
+    post:
+      tags:
+        - Task
+      summary: Add a new Task
+      requestBody:
+        description: Task create request
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                name:
+                  type: string
+              required:
+                - name
+                - status
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      status:
+                        type: string
+                      name:
+                        type: string
+                    required:
+                      - name
+                      - status
+                  - type: object
+                    properties:
+                      id:
+                        type: integer
+                    required:
+                      - id
+        '400':
+          description: Invalid request provided
+        '500':
+          description: Unexpected Error
+    patch:
+      tags:
+        - Task
+      summary: Update Task
+      requestBody:
+        description: Task update request
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    status:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                    - name
+                    - status
+                - type: object
+                  properties:
+                    id:
+                      type: integer
+                  required:
+                    - id
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid request provided
+        '500':
+          description: Unexpected Error
+    delete:
+      tags:
+        - Task
+      summary: Delete Task
+      requestBody:
+        description: Task delete request
+        content:
+          application/json:
+            schema:
+              properties:
+                id:
+                  type: integer
+              required:
+                - id
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid request provided
+        '500':
+          description: Unexpected Error
+  /tasks/setStatus/:
+    post:
+      tags:
+        - Task
+      summary: Set status
+      requestBody:
+        description: Set status request
+        content:
+          application/json:
+            schema:
+              properties:
+                status:
+                  type: string
+                id:
+                  type: integer
+              required:
+                - status
+                - id
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid request provided
+        '500':
+          description: Unexpected Error
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: jwt

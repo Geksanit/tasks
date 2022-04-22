@@ -1,0 +1,109 @@
+openapi: 3.0.1
+info:
+  title: NewSite Rest API
+  description: Categories
+  version: 1.0.0
+paths:
+  /tasks/:
+    get:
+      tags:
+        - Task
+      summary: All available tasks
+      responses:
+        200:
+          description: A list of categories.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "difinitions.yaml#/components/schemas/Task"
+        500:
+          description: Unexpected Error
+    post:
+      tags:
+        - Task
+      summary: Add a new Task
+      requestBody:
+        description: Task create request
+        content:
+          application/json:
+            schema:
+              $ref: "difinitions.yaml#/components/schemas/CreateTask"
+        required: true
+      responses:
+        201:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "difinitions.yaml#/components/schemas/Task"
+        400:
+          description: Invalid request provided
+        500:
+          description: Unexpected Error
+    patch:
+      tags:
+        - Task
+      summary: Update Task
+      requestBody:
+        description: Task update request
+        content:
+          application/json:
+            schema:
+              $ref: "difinitions.yaml#/components/schemas/Task"
+        required: true
+      responses:
+        200:
+          description: Successful operation
+        400:
+          description: Invalid request provided
+        500:
+          description: Unexpected Error
+    delete:
+      tags:
+        - Task
+      summary: Delete Task
+      requestBody:
+        description: Task delete request
+        content:
+          application/json:
+            schema:
+              properties:
+                id: 
+                  type: integer
+              required:
+                - id
+      responses:
+        200:
+          description: Successful operation
+        400:
+          description: Invalid request provided
+        500:
+          description: Unexpected Error
+  /tasks/setStatus/:
+    post:
+      tags:
+        - Task
+      summary: Set status
+      requestBody:
+        description: Set status request
+        content:
+            application/json:
+              schema:
+                properties:
+                  status: 
+                    type: string
+                  id: 
+                    type: integer
+                required:
+                  - status
+                  - id
+        required: true
+      responses:
+        200:
+          description: Successful operation
+        400:
+          description: Invalid request provided
+        500:
+          description: Unexpected Error

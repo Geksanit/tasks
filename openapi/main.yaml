@@ -1,0 +1,17 @@
+openapi: 3.0.1
+info:
+  title: Rest API Docs
+  description: MetaNews is a news site
+  version: 1.0.0
+paths:
+  /tasks/:
+    $ref: 'tasks.yaml#/paths/~1tasks~1'
+  /tasks/setStatus/:
+      $ref: 'tasks.yaml#/paths/~1tasks~1setStatus~1'
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: jwt
