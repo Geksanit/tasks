@@ -34,9 +34,7 @@ class TaskApi {
   }
 
   public async editTask(data: Task) {
-    console.log('editTask start');
     const response = await this.actions.patch<Response>(`${process.env.host}/tasks/`, data);
-    console.log('editTask stop', response);
     if (isFailureResponse(response.data)) {
       throw new Error(getErrorMessage(response.data.error));
     }

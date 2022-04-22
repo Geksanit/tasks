@@ -66,9 +66,7 @@ class TaskStore {
   *editTask(data: Task) {
     this.editTaskState = { isRequesting: true, error: null };
     try {
-      console.log('*editTask start');
       yield this.api.editTask(data);
-      console.log('*editTask stop');
       this.editTaskState = { isRequesting: false, error: null };
     } catch ({ message }) {
       this.editTaskState = { isRequesting: false, error: message as string };
