@@ -10,6 +10,8 @@ paths:
     $ref: 'tasks.yaml#/paths/~1tasks~1{id}'
   /tasks/setStatus/:
       $ref: 'tasks.yaml#/paths/~1tasks~1setStatus~1'
+  /queue/:
+    $ref: 'queue.yaml#/paths/~1queue~1'
 
 components:
   securitySchemes:

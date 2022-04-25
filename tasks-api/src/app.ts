@@ -10,6 +10,7 @@ import cors from 'cors';
 
 // import * as users from './modules/users';
 import * as tasks from './modules/tasks';
+import * as queue from './modules/queue';
 import { log } from './libs/log';
 import { errorHandler } from './middlewares/errorHandler';
 // import { initializeAuth } from './auth';
@@ -50,6 +51,9 @@ app.use(
 );
 
 app.use('/tasks', tasks.makeRouter());
+queue.makeRouter().then(router => {
+  app.use('/queue', router);
+});
 
 app.use(errorHandler);
 

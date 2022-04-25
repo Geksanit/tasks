@@ -1,0 +1,25 @@
+openapi: 3.0.1
+info:
+  title: Queue API
+  description: Queue
+  version: 1.0.0
+paths:
+  /queue/:
+    post:
+      tags:
+        - Queue
+      requestBody:
+        description: Task create request
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+              required:
+                - message
+        required: true
+      responses:
+        200:
+          description: Successful operation
